@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+    
+    table {
+        width: 40%;
+        margin: auto auto 20px auto;
+        border-collapse: collapse;
+        border: 2px solid #ddd;
+        background-color: #fff;
+    }
+    
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+        background-color: #f2f2f2;
+        color: #333;
+    }
+    
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+    
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    .enlaces{
+        display: flex;
+        justify-content: space-between;
+        width: 20vw;
+    }
+
+</style>
+<body>
+    {% include 'header.html' %}
+    <h1>Informació sobre el professor {{prof.nombre}}</h1>
+    <table>
+        <tr>
+            <th>id</th>
+            <th>nom</th>
+            <th>cognom</th>
+            <th>edat</th>
+            <th>rol</th>
+            <th>curs</th>
+
+        </tr>
+        <tr>
+            <td>{{ prof.id }}</td>
+            <td>{{ prof.nombre }}</td>
+            <td>{{ prof.apellido }}</td>
+            <td>{{ prof.edad }}</td>
+            <td>{{ prof.rol }}</td>
+            <td>{{ prof.curs }}</td>
+        </tr>
+    </table>
+<div class="enlaces">
+    <a href="{% url 'students' %}">Estudiants</a>
+    <a href="{% url 'teachers' %}">Professors</a>
+</div>
+
+</body>
+</html>
