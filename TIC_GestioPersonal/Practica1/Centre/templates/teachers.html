@@ -64,8 +64,9 @@
             <th>cognom</th>
             <th>edat</th>
             <th>rol</th>
-            <th>curs</th>
             <th>enllaç info</th>
+            <th>editar</th>
+            <th>borrar</th>
 
 
         </tr>
@@ -76,8 +77,10 @@
             <td>{{ prof.apellido }}</td>
             <td>{{ prof.edad }}</td>
             <td>{{ prof.rol }}</td>
-            <td>{{ prof.curs }}</td>
             <td><a href="{% url 'teacher' prof.id %}"> +INFO</a></td>
+            <td><a href="{% url 'update-user' prof.id %}">Editar</a></td>
+            <td><a href="{% url 'delete-user' prof.id %}">Borrar</a></td>
+
         </tr>
         {% endfor %}
     </table>
@@ -85,5 +88,6 @@
         <a href="{% url 'students' %}">Estudiants</a>
         <a href="{% url 'teachers' %}">Professors</a>
     </div>
+    <a href="{% url 'form' %}">Crear usuari</a>
 </body>
 </html>

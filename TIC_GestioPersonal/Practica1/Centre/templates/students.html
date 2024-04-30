@@ -61,15 +61,22 @@
         <tr>
             <th>id</th>
             <th>nom</th>
+            <th>edat</th>
             <th>cognom</th>
             <th>rol</th>
+            <th>editar</th>
+            <th>Borrar</th>
+
         </tr>
         {% for alumno in alumnos %}
         <tr>
             <td>{{ alumno.id }}</td>
             <td>{{ alumno.nombre }}</td>
+            <td>{{ alumno.edad }}</td>
             <td>{{ alumno.apellido }}</td>
             <td>{{ alumno.rol }}</td>
+            <td><a href="{% url 'update-user' alumno.id %}">Editar</a></td>
+            <td><a href="{% url 'delete-user' alumno.id %}">Borrar</a></td>
         </tr>
         {% endfor %}
     </table>
@@ -77,5 +84,7 @@
         <a href="{% url 'students' %}">Estudiants</a>
         <a href="{% url 'teachers' %}">Professors</a>
     </div>
+    <a href="{% url 'form' %}">Crear usuari</a>
+
 </body>
 </html>

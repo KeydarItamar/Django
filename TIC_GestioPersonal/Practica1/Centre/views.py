@@ -1,43 +1,39 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
-
-
+from .forms import PersonForm
+from . import models
 
 def students(request):
-    alumnos = [
-        {"id": 1, "nombre": "Juan", "apellido": "Pérez", "edad": 20, "rol": "Estudiante", "curso": "1º"},
-        {"id": 2, "nombre": "Marta", "apellido": "López", "edad": 22, "rol": "Estudiante", "curso": "2º"},
-        {"id": 3, "nombre": "Pedro", "apellido": "González", "edad": 25, "rol": "Estudiante", "curso": "3º"},
-        {"id": 4, "nombre": "María", "apellido": "García", "edad": 21, "rol": "Estudiante", "curso": "1º"},
-        {"id": 5, "nombre": "Ana", "apellido": "Martínez", "edad": 23, "rol": "Estudiante", "curso": "2º"}]
-  
+    data =list(models.persona.objects.all())
+    alumnos = []
+    for person in data:        
+        if person.rol == 'estudiant':
+            alumnos.append({"id": person.id, "nombre": person.nom, "apellido": person.cognom, "edad": person.edat, "rol": person.rol})
+            
     template = loader.get_template('students.html')
     dades = template.render({'alumnos': alumnos})
     return HttpResponse(dades)
 
 
+
+data =list(models.persona.objects.all())
+profesores = []
+for person in data:        
+    if person.rol == 'professor':
+        profesores.append({"id": person.id, "nombre": person.nom, "apellido": person.cognom, "edad": person.edat, "rol": person.rol})
+            
+
 def teachers(request):
-    profesores = [
-        {"id": 1, "nombre": "Pedro", "apellido": "Martínez", "edad": 35, "rol": "Profesor", "curs": "Informática"},
-        {"id": 2, "nombre": "María", "apellido": "López", "edad": 40, "rol": "Profesor", "curs": "Matemáticas"},
-        {"id": 3, "nombre": "Juan", "apellido": "González", "edad": 38, "rol": "Profesor", "curs": "Física"},
-        {"id": 4, "nombre": "Ana", "apellido": "Sánchez", "edad": 45, "rol": "Profesor", "curs": "Historia"},
-        {"id": 5, "nombre": "Laura", "apellido": "Fernández", "edad": 42, "rol": "Profesor", "curs": "Lengua"},
-    ]
+    data =list(models.persona.objects.all())
+    profesores = []
+    for person in data:        
+        if person.rol == 'professor':
+            profesores.append({"id": person.id, "nombre": person.nom, "apellido": person.cognom, "edad": person.edat, "rol": person.rol})
 
     template = loader.get_template('teachers.html')
     dades = template.render({'profesores' : profesores})
     return HttpResponse(dades)
-
-
-profesores = [
-    {"id": 1, "nombre": "Pedro", "apellido": "Martínez", "edad": 35, "rol": "Profesor", "curs": "Informática"},
-    {"id": 2, "nombre": "María", "apellido": "López", "edad": 40, "rol": "Profesor", "curs": "Matemáticas"},
-    {"id": 3, "nombre": "Juan", "apellido": "González", "edad": 38, "rol": "Profesor", "curs": "Física"},
-    {"id": 4, "nombre": "Ana", "apellido": "Sánchez", "edad": 45, "rol": "Profesor", "curs": "Historia"},
-    {"id": 5, "nombre": "Laura", "apellido": "Fernández", "edad": 42, "rol": "Profesor", "curs": "Lengua"},
-]
 
 def teacher(request, id):
     teacher_obj = None
@@ -46,6 +42,35 @@ def teacher(request, id):
             teacher_obj = n
     return render(request, 'profesor.html', {'prof': teacher_obj})
         
-# Create your views here.
+def form(request):
+    form = PersonForm(request.POST)
+    if form.is_valid():
+        form.save()
+        return redirect('students')
+    
+    context ={"form": form}
+    return render(request, 'user_form.html', context)
 
 
+def update_user(request, pk):
+    personaData = models.persona.objects.get(id=pk)
+    form = PersonForm(instance=personaData)
+    
+    if request.method == 'POST':
+        form = PersonForm(request.POST, instance=personaData)  
+        if form.is_valid():
+            form.save()
+            return redirect('students')
+        
+    context = {'form': form}
+    return render(request, 'update_user.html', context)
+
+def delete_user(request, pk):
+    personData = models.persona.objects.get(id=pk)
+    
+    if request.method == 'POST':
+        personData.delete()
+        return redirect('students')
+    
+    context = {'personData' : personData}
+    return render(request, 'delete_object.html', context)
